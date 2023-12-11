@@ -5,6 +5,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.inputmethod.EditorInfo
+import android.widget.Button
+import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.RelativeLayout
 import android.widget.TextView
@@ -19,13 +22,45 @@ import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
 
-    val CITY: String = "sorocaba,br"
-    val API: String = ""
+    lateinit var API: String
+    lateinit var CITY: EditText
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        weatherTask().execute()
+        API = getString(R.string.open_weather_api_key)
+        CITY = findViewById(R.id.city_name)
+
+        val btnSearch: Button = findViewById(R.id.btnSearch)
+
+        btnSearch.setOnClickListener {
+            searchWeather()
+        }
+        CITY.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                searchWeather()
+                true
+            } else {
+                false
+            }
+        }
+
+
+    }
+
+    private fun searchWeather() {
+        val cityName = CITY.text.toString().trim()
+
+        if (cityName.isNotEmpty()) {
+            weatherTask().execute(cityName)
+        } else {
+            Toast.makeText(
+                this@MainActivity,
+                "Por favor, insira um nome de cidade válido",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
     }
 
     inner class weatherTask() : AsyncTask<String, Void, String>()
@@ -40,11 +75,10 @@ class MainActivity : AppCompatActivity() {
         override fun doInBackground(vararg params: String?): String? {
             var response: String?
             try {
-                response = URL("https://api.openweathermap.org/data/2.5/weather?q=$CITY&units=metric&appid=$API")
+                val cityName = params[0] // Pegar o nome da cidade passado como parâmetro
+                response = URL("https://api.openweathermap.org/data/2.5/weather?q=$cityName&units=metric&appid=$API")
                     .readText(Charsets.UTF_8)
-            }
-            catch (e: Exception)
-            {
+            } catch (e: Exception) {
                 response = null
             }
             return response
@@ -89,8 +123,6 @@ class MainActivity : AppCompatActivity() {
             catch (e: Exception) {
                 findViewById<ProgressBar>(R.id.loader).visibility = View.GONE
                 findViewById<TextView>(R.id.errortext).visibility = View.VISIBLE
-
-                Log.i("errorr", e.message.toString())
             }
         }
     }
