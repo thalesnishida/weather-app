@@ -20,7 +20,7 @@ import java.util.Locale
 class MainActivity : AppCompatActivity() {
 
     val CITY: String = "sorocaba,br"
-    val API: String = "b53c6a259cb25d8733d1f7096ec0d8f4"
+    val API: String = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
