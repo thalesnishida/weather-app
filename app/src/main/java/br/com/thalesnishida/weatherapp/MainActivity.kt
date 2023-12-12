@@ -1,9 +1,10 @@
 package br.com.thalesnishida.weatherapp
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.location.Location
 import android.os.AsyncTask
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.Button
@@ -12,18 +13,22 @@ import android.widget.ProgressBar
 import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import org.json.JSONObject
-import java.lang.Exception
 import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 
 
 class MainActivity : AppCompatActivity() {
 
-    lateinit var API: String
-    lateinit var CITY: EditText
+    private lateinit var API: String
+    private lateinit var CITY: EditText
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
