@@ -33,7 +33,7 @@
                     android:id="@+id/city_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Insira nome da cidade"
+                    android:hint="Insert the name of the city"
                     android:textColor="@color/white"
                     />
 
